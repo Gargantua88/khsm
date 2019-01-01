@@ -69,7 +69,6 @@ RSpec.describe Game, type: :model do
   end
 
   context '.status' do
-
     before(:each) do
       game_w_questions.finished_at = Time.now
       expect(game_w_questions.finished?).to be_truthy
@@ -96,5 +95,28 @@ RSpec.describe Game, type: :model do
     end
   end
 
+  context '.answer_current_question!' do
+    it 'answer is correct' do
+      level = game_w_questions.current_level
+      expect(game_w_questions.answer_current_question!('d')).to be_truthy
+      expect(game_w_questions.current_level).to eq(level + 1)
+    end
 
+    it 'answer is correct and last' do
+      game_w_questions.current_level = 14
+      expect(game_w_questions.answer_current_question!('d')).to be_truthy
+      expect(game_w_questions.status).to eq(:won)
+    end
+
+    it 'answer is incorrect' do
+      expect(game_w_questions.answer_current_question!('a')).to be_falsey
+      expect(game_w_questions.status).to eq(:fail)
+    end
+
+    it 'time is up' do
+      game_w_questions.created_at = 1.hour.ago
+      expect(game_w_questions.answer_current_question!('d')).to be_falsey
+      expect(game_w_questions.status).to eq(:timeout)
+    end
+  end
 end
