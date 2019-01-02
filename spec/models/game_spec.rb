@@ -62,7 +62,7 @@ RSpec.describe Game, type: :model do
 
       game_w_questions.take_money!
 
-      expect(game_w_questions.status).to eq :money
+      expect(game_w_questions.status).to eq(:money)
       expect(game_w_questions.finished?).to be_truthy
       expect(user.balance).to eq(game_w_questions.prize)
     end
@@ -100,23 +100,28 @@ RSpec.describe Game, type: :model do
       level = game_w_questions.current_level
       expect(game_w_questions.answer_current_question!('d')).to be_truthy
       expect(game_w_questions.current_level).to eq(level + 1)
+      expect(game_w_questions.status).to eq(:in_progress)
+      expect(game_w_questions.finished?).to be_falsey
     end
 
     it 'answer is correct and last' do
       game_w_questions.current_level = 14
       expect(game_w_questions.answer_current_question!('d')).to be_truthy
       expect(game_w_questions.status).to eq(:won)
+      expect(game_w_questions.finished?).to be_truthy
     end
 
     it 'answer is incorrect' do
       expect(game_w_questions.answer_current_question!('a')).to be_falsey
       expect(game_w_questions.status).to eq(:fail)
+      expect(game_w_questions.finished?).to be_truthy
     end
 
     it 'time is up' do
       game_w_questions.created_at = 1.hour.ago
       expect(game_w_questions.answer_current_question!('d')).to be_falsey
       expect(game_w_questions.status).to eq(:timeout)
+      expect(game_w_questions.finished?).to be_truthy
     end
   end
 end
