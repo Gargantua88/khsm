@@ -150,5 +150,40 @@ RSpec.describe GamesController, type: :controller do
       expect(game.current_game_question.help_hash[:audience_help].keys).to contain_exactly('a', 'b', 'c', 'd')
       expect(response).to redirect_to(game_path(game))
     end
+
+    it 'uses fifty_fifty' do
+      expect(game_w_questions.current_game_question.help_hash[:fifty_fifty]).not_to be
+      expect(game_w_questions.fifty_fifty_used).to be_falsey
+
+      put :help, id: game_w_questions.id, help_type: :fifty_fifty
+      game = assigns(:game)
+
+      expect(game.finished?).to be_falsey
+      expect(game.fifty_fifty_used).to be_truthy
+
+      test_hash = game.current_game_question.help_hash[:fifty_fifty]
+
+      expect(test_hash).to be
+      expect(test_hash).to include('d')
+      expect(test_hash.size).to eq(2)
+      expect(response).to redirect_to(game_path(game))
+    end
+
+    it 'uses friend_call' do
+      expect(game_w_questions.current_game_question.help_hash[:friend_call]).not_to be
+      expect(game_w_questions.friend_call_used).to be_falsey
+
+      put :help, id: game_w_questions.id, help_type: :friend_call
+      game = assigns(:game)
+
+      expect(game.finished?).to be_falsey
+      expect(game.friend_call_used).to be_truthy
+      expect(game.current_game_question.help_hash[:friend_call]).to be
+
+      test_hash = game.current_game_question.help_hash[:friend_call]
+
+      expect(test_hash).to include('считает, что это вариант')
+      expect(test_hash.last.downcase).to be_in(%w(a b c d))
+    end
   end
 end
