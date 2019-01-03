@@ -30,8 +30,6 @@ RSpec.describe GamesController, type: :controller do
     end
 
     it 'kick from #take_money' do
-      expect(game_w_questions.finished?).to be_falsey
-
       put :take_money, id: game_w_questions.id
       game = assigns(:game)
 
@@ -43,8 +41,6 @@ RSpec.describe GamesController, type: :controller do
     end
 
     it 'kick from #answer' do
-      expect(game_w_questions.finished?).to be_falsey
-
       put :answer, id: game_w_questions.id, letter: game_w_questions.current_game_question.correct_answer_key
       game = assigns(:game)
 
