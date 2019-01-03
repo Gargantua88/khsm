@@ -94,6 +94,7 @@ RSpec.describe GamesController, type: :controller do
       game = assigns(:game)
 
       expect(game.finished?).to be_truthy
+      expect(game.status).to eq(:fail)
       expect(response).to redirect_to(user_path(user))
       expect(flash[:alert]).to be
       expect(game.prize).to eq(32000)
@@ -117,6 +118,7 @@ RSpec.describe GamesController, type: :controller do
       game = assigns(:game)
 
       expect(game.finished?).to be_truthy
+      expect(game.status).to eq(:money)
       expect(game.prize).to eq(500000)
 
       user.reload
