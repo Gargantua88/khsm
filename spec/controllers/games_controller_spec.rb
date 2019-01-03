@@ -89,10 +89,18 @@ RSpec.describe GamesController, type: :controller do
     end
 
     it 'answer incorrect' do
+      game_w_questions.update_attribute(:current_level, 12)
       put :answer, id: game_w_questions.id, letter: 'e'
       game = assigns(:game)
 
       expect(game.finished?).to be_truthy
+      expect(response).to redirect_to(user_path(user))
+      expect(flash[:alert]).to be
+      expect(flash[:alert]).to be
+      expect(game.prize).to eq(32000)
+
+      user.reload
+      expect(user.balance).to eq(32000)
     end
 
     it 'kick another user from #show' do
