@@ -37,7 +37,6 @@ RSpec.describe GamesController, type: :controller do
       expect(response.status).not_to eq 200
       expect(response).to redirect_to(new_user_session_path)
       expect(flash[:alert]).to be
-      expect(flash[:prize]).not_to be
     end
 
     it 'kick from #answer' do
@@ -87,6 +86,13 @@ RSpec.describe GamesController, type: :controller do
       expect(game.current_level).to be > 0
       expect(response).to redirect_to game_path(game)
       expect(flash.empty?).to be_truthy
+    end
+
+    it 'answer incorrect' do
+      put :answer, id: game_w_questions.id, letter: 'e'
+      game = assigns(:game)
+
+      expect(game.finished?).to be_truthy
     end
 
     it 'kick another user from #show' do
