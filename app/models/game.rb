@@ -1,5 +1,5 @@
-#  (c) goodprogrammer.ru
-#
+require 'game_help_generator'
+
 # Модельи игры — создается когда пользователь начинает новую игру. Хранит и
 # обновляет состояние игры и отвечает за игровой процесс.
 class Game < ActiveRecord::Base
@@ -143,6 +143,23 @@ class Game < ActiveRecord::Base
     finish_game!(previous_level > -1 ? PRIZES[previous_level] : 0, false)
   end
 
+  # Создает варианты подсказок для текущего игрового вопроса.
+  # Возвращает true, если подсказка применилась успешно,
+  # false если подсказка уже заюзана.
+  #
+  # help_type = :fifty_fifty | :audience_help | :friend_call
+  #
+  def use_help(help_type)
+    help_types = %i(fifty_fifty audience_help friend_call)
+    help_type = help_type.to_sym
+    raise ArgumentError.new('wrong help_type') unless help_types.include?(help_type)
+
+    unless self["#{help_type}_used"]
+      self["#{help_type}_used"] = true
+      current_game_question.apply_help!(help_type)
+      save
+    end
+  end
   # Результат игры status, возвращает, одно из:
   #
   # :fail — игра проиграна из-за неверного вопроса
