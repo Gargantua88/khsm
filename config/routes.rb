@@ -3,12 +3,11 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  # в профиле юзера показываем его игры, на главной - список лучших игроков
   resources :users, only: [:index, :show]
 
   resources :games, only: [:create, :show] do
     put 'help', on: :member
-    put 'answer', on: :member # доп. метод ресурса - ответ на текущий вопро
+    put 'answer', on: :member # доп. метод ресурса - ответ на текущий вопрос
     put 'take_money', on: :member # доп. метод ресурса - игрок берет деньги
   end
 

@@ -45,9 +45,3 @@ Rails.application.configure do
   config.asset_host = 'http://localhost:3000'
   config.static_cache_control = 'public, max-age=3600'
 end
-
-#
-# Можно завести поле статус в модели и хранить там явно нужное значение,
-# ориентироваться на него, вместо динамического вычисления статуса.
-# Главное при этом правильно его сохранять.
-#

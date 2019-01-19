@@ -35,7 +35,7 @@ RSpec.describe GameQuestion, type: :model do
       expect(gq.help_hash).to eq({foo_bar1: 'blabla1', 'foo_bar2' => 'blabla2'})
     end
   end
-  # # help_hash у нас имеет такой формат:
+  # # help_hash имеет такой формат:
   #   # {
   #   #   # При использовании подсказски остались варианты a и b
   #   #   fifty_fifty: ['a', 'b'],
@@ -43,7 +43,7 @@ RSpec.describe GameQuestion, type: :model do
   #   #   # Распределение голосов по вариантам a, b, c, d
   #   #   audience_help: {'a' => 42, 'c' => 37 ...},
   #   #
-  #   #   # Друг решил, что правильный ответ А (просто пишем текстом)
+  #   #   # Друг решил, что правильный ответ А
   #   #   friend_call: 'Василий Петрович считает, что правильный ответ A'
   #   # }
 
